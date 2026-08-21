@@ -1,16 +1,17 @@
-# Import the FastAPI class
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-# Create a FastAPI application instance named app
-# Give it the title "Document Requirements Analyzer API"
 app = FastAPI(title="Document Requirements Analzer API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Register an HTTP GET endpoint at /health
+
 @app.get("/health")
-
-# When /health is requested:
-#     Return a JSON-compatible dictionary containing:
-#         status: "ok"
 def health_check() -> dict[str, str]:
     return {"status": "ok"}
