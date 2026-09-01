@@ -1,0 +1,8 @@
+# Installed on the host for your OS — reinstalled fresh inside the container instead
+node_modules
+
+# Local build cache, container builds its own
+.next
+
+# No need for git metadata inside the image
+.git
