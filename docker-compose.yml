@@ -1,0 +1,27 @@
+services:
+  # FastAPI backend, served by uvicorn on port 8000
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount local source over the image's copy so code edits live-reload
+      # without rebuilding the image (works with uvicorn's --reload flag)
+      - ./backend/app:/app/app
+
+  # Next.js frontend dev server on port 3000
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    volumes:
+      # Mount local source so edits hot-reload in the running container
+      - ./frontend:/app
+      # But keep the container's own node_modules — don't let the bind mount
+      # above overwrite it with your host's (Windows-built) node_modules
+      - /app/node_modules
+    depends_on:
+      # Just controls start order; doesn't wait for /health to actually respond
+      - backend
